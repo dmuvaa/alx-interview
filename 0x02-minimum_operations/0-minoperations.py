@@ -15,7 +15,7 @@ def minOperations(n):
         if n % divisor == 0:
             res += divisor
             n = n // divisor
-        
+
         else:
             divisor += 1
 
