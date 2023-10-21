@@ -3,55 +3,44 @@
 """Import some modules"""
 
 import sys
-import signal
+
+"""create a function that takes file size and status"""
 
 
-"""Store total file size and status code counts"""
-file_size = 0
-status_codes = {
-    "200": 0,
-    "301": 0,
-    "400": 0,
-    "401": 0,
-    "403": 0,
-    "404": 0,
-    "405": 0,
-    "500": 0
-}
+def _print(total_file_size, status):
+    """function to print total file size and status codes"""
+    print("File size: {:d}".format(total_file_size))
+    for key, value in sorted(statuses.items()):
+        if value != 0:
+            print("{}: {}".format(key, value))
 
 
-def print_statistics(signal=None, frame=None):
-    """Print the current statistics."""
-    global file_size, status_codes
-    print("File size:", file_size)
-    for code in sorted(status_codes.keys()):
-        if status_codes[code] > 0:
-            print("{}: {}".format(code, status_codes[code]))
-    if signal:
-        sys.exit(0)
+statuses = {
+        '200': 0, '301': 0,
+        '400': 0, '401': 0, '403': 0, '404': 0, '405': 0, '500': 0}
 
+total_file_size = 0
+count = 0
+try:
+    for line in sys.stdin:
+        args = line.split()
 
-"""Setup a signal handler to catch CTRL+C"""
-signal.signal(signal.SIGINT, print_statistics)
+        if len(args) > 2:
+            status_code = args[-2]
+            file_size = int(args[-1])
 
-"""Process the input lines"""
-counter = 0
-for line in sys.stdin:
-    try:
-        parts = line.split()
-        if len(parts) < 9:
-            continue
-        size = int(parts[-1])
-        status_code = parts[-2]
-        file_size += size
-        if status_code in status_codes:
-            status_codes[status_code] += 1
-        counter += 1
-        if counter % 10 == 0:
-            print_statistics()
-    except ValueError:
-        pass
+            if status_code in statuses:
+                statuses[status_code] += 1
 
-"""Final print if the input didn't end in a multiple of 10"""
-if counter % 10 != 0:
-    print_statistics()
+            total_file_size += file_size
+            count += 1
+
+            if count == 10:
+                _print(total_file_size, statuses)
+                count = 0
+
+except KeyboardInterrupt:
+    pass
+
+finally:
+    _print(total_file_size, statuses)
