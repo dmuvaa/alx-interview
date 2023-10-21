@@ -1,7 +1,10 @@
 #!/usr/bin/python3
 
+"""Import some modules"""
+
 import sys
 import signal
+
 
 """Store total file size and status code counts"""
 file_size = 0
