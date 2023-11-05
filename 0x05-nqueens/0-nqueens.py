@@ -16,6 +16,7 @@ def print_solution(solutions):
     for solution in solutions:
         print(solution)
 
+
 def is_safe(board, row, col, n):
     """This function determines if it's safe to place
     a queen at the board position [row, col]
@@ -36,10 +37,11 @@ def is_safe(board, row, col, n):
 
     return True
 
+
 def solve_n_queens(board, col, n, solutions):
     """recursive function attempts to solve the N-Queens problem"""
     if col >= n:
-        solutions.append([ [i, row.index(1)] for i, row in enumerate(board)])
+        solutions.append([[i, row.index(1)] for i, row in enumerate(board)])
         return
 
     for i in range(n):
@@ -48,14 +50,16 @@ def solve_n_queens(board, col, n, solutions):
             solve_n_queens(board, col + 1, n, solutions)
             board[i][col] = 0  # backtrack
 
+
 def nqueens(n):
-    """main function that sets up the board 
+    """main function that sets up the board
     and calls the backtracking solver function
     """
     board = [[0 for _ in range(n)] for _ in range(n)]
     solutions = []
     solve_n_queens(board, 0, n, solutions)
     print_solution(solutions)
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
