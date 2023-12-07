@@ -4,6 +4,7 @@
 
 
 def isWinner(x, nums):
+    """Define other methods"""
     def generate_primes(n):
         """Prime Game Method"""
         sieve = [True] * (n + 1)
